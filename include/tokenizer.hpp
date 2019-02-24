@@ -27,6 +27,7 @@ struct token {
   t_token type;
   int value;
 };
+
 class tokenizer {
   source src_;
   std::vector<token> tokens_;
@@ -82,6 +83,9 @@ class tokenizer {
       if (src_.peek() == ')') {
         callback(src_.peek());
         scan();
+      } else {
+        error(std::string("\")\" expected but got \"") + src_.peek() + "\"");
+        return;
       }
     }
   }
@@ -95,10 +99,8 @@ class tokenizer {
     scan();
   }
   void eof() {
-    if (src_.peek() != EOF) {
-      error(std::string("EOF expected but got \"") + src_.peek() + "\"");
-      return;
+    if (!src_.has_next()) {
+      callback("<EOF>");
     }
-    callback(src_.peek());
   }
 };
