@@ -91,12 +91,18 @@ class tokenizer {
   }
   void num() {
     std::string s;
-    while (src_.peek() >= '0' && src_.peek() <= '9') {
-      s += src_.peek();
-      src_.next();
+    while (true) {
+      if (src_.peek() >= '0' && src_.peek() <= '9') {
+        s += src_.peek();
+        src_.next();
+      } else {
+        break;
+      }
     }
     callback(s);
-    scan();
+    if (src_.peek() == ' ') {
+      scan();
+    }
   }
   void eof() {
     if (!src_.has_next()) {
