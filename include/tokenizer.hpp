@@ -76,6 +76,8 @@ class tokenizer {
   void factor() {
     if (src_.peek() >= '0' && src_.peek() <= '9') {
       num();
+    } else if (src_.peek() >= 'a' && src_.peek() <= 'z') {
+      id();
     } else if (src_.peek() == '(') {
       callback(src_.peek());
       scan();
@@ -93,6 +95,21 @@ class tokenizer {
     std::string s;
     while (true) {
       if (src_.peek() >= '0' && src_.peek() <= '9') {
+        s += src_.peek();
+        src_.next();
+      } else {
+        break;
+      }
+    }
+    callback(s);
+    if (src_.peek() == ' ') {
+      scan();
+    }
+  }
+  void id() {
+    std::string s;
+    while (true) {
+      if (src_.peek() >= 'a' && src_.peek() <= 'z') {
         s += src_.peek();
         src_.next();
       } else {
